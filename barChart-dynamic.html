@@ -1,0 +1,80 @@
+<!-- license MIT -->
+<!-- Written by for demo only, takes no obligation -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Queue Chart</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+  <script src="jquery-3.3.1.js"></script>
+</head>
+<body>
+    <canvas id="bar" width="800" height="450"></canvas>
+
+<script>
+var ctx = document.getElementById("bar").getContext('2d');
+var queueChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [],
+            datasets: [{
+                label: "Queue Info",
+                data: [],
+                backgroundColor: []
+            }]
+        },
+        responsive : true,
+        options: {
+            responsiveAnimationDuration: 2000,
+        }
+    });
+function setColor(data){
+    var color=[];
+    for(var i=0; i< data.length; i++) {
+        color[i] = "rgba(153,255,51,1)";
+    }
+    color[0]="yellow";
+    return color;
+}  
+function refresh(){
+	var newData = 'name1,name2,n3,n4,n5;5,7,9,7,14';
+	draw(newData);
+/*
+    var jsonData = $.ajax({
+        type: 'GET',
+        url: 'https://real time /data/name n count',
+        dataType: 'text json',
+        cache: false
+    }).done(function(response) {
+            draw(response.responseText);
+    }).fail(function (error) {
+            draw(error.responseText);
+    });
+*/	
+}
+function draw(data) {
+    var all = data.split(";");
+    var names = all[0].split(",");
+    var values = all[1].split(",");
+    var data = {
+        labels: names,
+        datasets: [{
+            label: "Queue Info",
+            data: values,
+            backgroundColor: []
+        }]
+    };
+    queueChart.config.data = data;
+    var color = setColor(data.datasets[0].data);
+    queueChart.config.data.datasets[0].backgroundColor=color;
+    queueChart.update();
+}
+function looping() {
+    setTimeout(function(){ refresh(); looping();}, 3000);
+}
+refresh()
+looping();
+</script>
+
+</script>
+</body>
+</html>
